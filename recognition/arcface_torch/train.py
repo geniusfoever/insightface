@@ -21,19 +21,20 @@ from utils.utils_distributed_sampler import setup_seed
 assert torch.__version__ >= "1.9.0", "In order to enjoy the features of the new torch, \
 we have upgraded the torch to 1.9.0. torch before than 1.9.0 may not work in the future."
 
-try:
-    world_size = int(os.environ["WORLD_SIZE"])
-    rank = int(os.environ["RANK"])
-    distributed.init_process_group("nccl")
-except KeyError:
-    world_size = 1
-    rank = 0
-    distributed.init_process_group(
-        backend="nccl",
-        init_method="tcp://127.0.0.1:12584",
-        rank=rank,
-        world_size=world_size,
-    )
+world_size=1
+
+rank =0
+# try:
+#     distributed.init_process_group("nccl")
+# except KeyError:
+#     world_size = 1
+#     rank = 0
+#     distributed.init_process_group(
+#         backend="nccl",
+#         init_method="tcp://127.0.0.1:12584",
+#         rank=rank,
+#         world_size=world_size,
+#     )
 
 
 def main(args):
