@@ -7,7 +7,7 @@ config = edict()
 config.bn_mom = 0.9
 config.workspace = 256
 config.emb_size = 512
-config.ckpt_embedding = True
+config.ckpt_embedding = False
 config.net_se = 0
 config.net_act = 'prelu'
 config.net_unit = 3
@@ -116,15 +116,16 @@ dataset = edict()
 
 dataset.emore = edict()
 dataset.emore.dataset = 'emore'
-dataset.emore.dataset_path = "D:/DataBase/faces_umd"
-dataset.emore.num_classes = 180855
-dataset.emore.image_shape = (112, 112, 3)
-dataset.emore.val_targets = ['lfw', 'cfp_fp', 'agedb_30']
+dataset.emore.dataset_path = '/content/gdrive/MyDrive/insightface/dataset/lfw_masked/'
+dataset.emore.num_classes = 4030
+dataset.emore.image_shape = (112,112,3)
+#dataset.emore.val_targets = ['lfw','cfp_ff','cfp_fp', 'agedb_30','shunde']
+dataset.emore.val_targets = ['test']
 
 dataset.retina = edict()
 dataset.retina.dataset = 'retina'
-dataset.retina.dataset_path = '../datasets/ms1m-retinaface-t1'
-dataset.retina.num_classes = 93431
+dataset.retina.dataset_path = '/content/gdrive/MyDrive/insightface/dataset/faces_umd/'
+dataset.retina.num_classes = 18055
 dataset.retina.image_shape = (112, 112, 3)
 dataset.retina.val_targets = ['lfw', 'cfp_fp', 'agedb_30']
 
@@ -183,8 +184,11 @@ default = edict()
 
 # default network
 default.network = 'r100'
-default.pretrained ="D:\Models\InsightFace\model-r100-ii\model"
+default.pretrained = '/content/gdrive/MyDrive/insightface/model/model-r100-ii-finetune/model'
 default.pretrained_epoch = 0
+
+#default.pretrained = '/content/gdrive/MyDrive/insightface/FaceRecognitionWIthInsightface/models/my/model-y1-test2/model'
+#default.pretrained_epoch = 9
 # default dataset
 default.dataset = 'emore'
 default.loss = 'arcface'
@@ -193,13 +197,13 @@ default.verbose = 2000
 default.kvstore = 'device'
 
 default.end_epoch = 10000
-default.lr = 0.1
+default.lr = 1
 default.wd = 0.0005
 default.mom = 0.9
-default.per_batch_size = 16
-default.ckpt = 3
-default.lr_steps = '100000,160000,220000'
-default.models_root = './models'
+default.per_batch_size = 64
+default.ckpt = 2
+default.lr_steps = '1000,100000,160000,220000'
+default.models_root = '/content/gdrive/MyDrive/insightface/model/'
 
 
 def generate_config(_network, _dataset, _loss):
