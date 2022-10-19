@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5d84e2dd-7565-46b6-84bb-3986b28d9992" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="5d84e2dd-7565-46b6-84bb-3986b28d9992" name="Changes" comment="yes">
       <change beforePath="$PROJECT_DIR$/recognition/arcface_mxnet/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_mxnet/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recognition/arcface_mxnet/verification.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_mxnet/verification.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,8 +134,16 @@
       <workItem from="1664943198687" duration="57000" />
       <workItem from="1664952743512" duration="1558000" />
       <workItem from="1666102350974" duration="1981000" />
-      <workItem from="1666152208768" duration="11090000" />
+      <workItem from="1666152208768" duration="11467000" />
     </task>
+    <task id="LOCAL-00001" summary="yes">
+      <created>1666177197272</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1666177197272</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -153,6 +159,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="yes" />
+    <option name="LAST_COMMIT_MESSAGE" value="yes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

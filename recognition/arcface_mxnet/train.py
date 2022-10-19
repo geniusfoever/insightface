@@ -16,7 +16,7 @@ import argparse
 import mxnet.optimizer as optimizer
 from config import config, default, generate_config
 from metric import *
-sys.path.append(os.path.join(os.path.dirname(os.path.cu),  'common'))
+sys.path.append(os.path.join(os.path.dirname(__file__),  'common'))
 import flops_counter
 import verification
 sys.path.append(os.path.join(os.path.dirname(__file__),  'symbol'))
