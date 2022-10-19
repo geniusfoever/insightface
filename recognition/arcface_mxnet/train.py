@@ -16,7 +16,7 @@ import argparse
 import mxnet.optimizer as optimizer
 from config import config, default, generate_config
 from metric import *
-sys.path.append(os.path.join(os.path.dirname(__file__),  'common'))
+sys.path.append(os.path.join(os.path.dirname(os.path.cu),  'common'))
 import flops_counter
 import verification
 sys.path.append(os.path.join(os.path.dirname(__file__),  'symbol'))
@@ -297,9 +297,17 @@ def train_net(args):
 
     #label_name = 'softmax_label'
     #label_shape = (args.batch_size,)
+    fpm = []
+    for name in sym.list_arguments():
+        if name == "bn1_gamma":
+            break
+        fpm.append(name)
+
     model = mx.mod.Module(
         context=ctx,
         symbol=sym,
+
+        fixed_param_names=fpm
     )
     val_dataiter = None
 

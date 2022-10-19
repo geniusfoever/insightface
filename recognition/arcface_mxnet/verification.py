@@ -274,6 +274,7 @@ def test(data_set,
                                      label=(_label, ))
             model.forward(db, is_train=False)
             net_out = model.get_outputs()
+
             #_arg, _aux = model.get_params()
             #__arg = {}
             #for k,v in _arg.iteritems():
@@ -287,6 +288,7 @@ def test(data_set,
             #exe.forward(is_train=False)
             #net_out = exe.outputs
             _embeddings = net_out[0].asnumpy()
+            print("Peter Verification Embedding Shape: ",_embeddings.shape)
             time_now = datetime.datetime.now()
             diff = time_now - time0
             time_consumed += diff.total_seconds()
