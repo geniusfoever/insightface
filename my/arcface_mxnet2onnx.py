@@ -3,7 +3,7 @@ import onnx
 import mxnet as mx
 import numpy as np
 from mxnet.contrib import onnx as onnx_mxnet
-import mxnet.contrib.onnx.mx2onnx.export_onnx as mx_op
+import mxnet.onnx.mx2onnx.export_model as mx_op
 from mxnet.contrib.onnx.mx2onnx._op_translations import get_inputs
 
 print('mxnet version:', mx.__version__)
