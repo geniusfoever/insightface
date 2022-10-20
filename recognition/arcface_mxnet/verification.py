@@ -288,7 +288,6 @@ def test(data_set,
             #exe.forward(is_train=False)
             #net_out = exe.outputs
             _embeddings = net_out[0].asnumpy()
-            print("Peter Verification Embedding Shape: ",_embeddings.shape)
             time_now = datetime.datetime.now()
             diff = time_now - time0
             time_consumed += diff.total_seconds()
@@ -591,13 +590,11 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='do verification')
     # general
-    parser.add_argument('--data-dir', default='', help='')
-    parser.add_argument('--model',
-                        default='../model/softmax,50',
-                        help='path to load model.')
-    parser.add_argument('--target',
-                        default='lfw,cfp_ff,cfp_fp,agedb_30',
-                        help='test targets.')
+    parser.add_argument('--data-dir',
+                        default='D:\DataBase\51\lfw_masked',
+                        help='')
+    parser.add_argument('--model', default='G:\My Drive\insightface\model\r100-arcface-emore,26', help='path to load model.')
+    parser.add_argument('--target', default='test', help='test targets.')
     parser.add_argument('--gpu', default=0, type=int, help='gpu id')
     parser.add_argument('--batch-size', default=32, type=int, help='')
     parser.add_argument('--max', default='', type=str, help='')
