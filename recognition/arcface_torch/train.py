@@ -38,7 +38,6 @@ rank =0
 
 
 def main(args):
-
     # get config
     cfg = get_config(args.config)
     # global control random seed
@@ -133,7 +132,7 @@ def main(args):
         logging.info(": " + key + " " * num_space + str(value))
 
     callback_verification = CallBackVerification(
-        val_targets=cfg.val_targets, rec_prefix=cfg.rec, summary_writer=summary_writer
+        val_targets=cfg.val_targets, rec_prefix=cfg.val_root, summary_writer=summary_writer
     )
     callback_logging = CallBackLogging(
         frequent=cfg.frequent,

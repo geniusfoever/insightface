@@ -2,9 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5d84e2dd-7565-46b6-84bb-3986b28d9992" name="Changes" comment="final">
+      <change beforePath="$PROJECT_DIR$/.idea/insightface.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/insightface.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recognition/arcface_mxnet/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_mxnet/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recognition/arcface_mxnet/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_mxnet/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recognition/arcface_torch/configs/glint360k_r100.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_torch/configs/glint360k_r100.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recognition/arcface_torch/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_torch/dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recognition/arcface_torch/eval/verification.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_torch/eval/verification.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recognition/arcface_torch/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_torch/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recognition/arcface_torch/utils/utils_callbacks.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_torch/utils/utils_callbacks.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -210,6 +215,7 @@
       <workItem from="1666879266603" duration="28000" />
       <workItem from="1666942324819" duration="7000" />
       <workItem from="1671169311984" duration="928000" />
+      <workItem from="1671170565916" duration="6563000" />
     </task>
     <task id="LOCAL-00001" summary="yes">
       <created>1666177197272</created>

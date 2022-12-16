@@ -4,7 +4,7 @@ import queue as Queue
 import threading
 from typing import Iterable
 
-import mxnet as mx
+# import mxnet as mx
 import numpy as np
 import torch
 from functools import partial
@@ -35,17 +35,20 @@ def get_dataloader(
         dali = False
 
     # Mxnet RecordIO
-    elif os.path.exists(rec) and os.path.exists(idx):
-        train_set = MXFaceDataset(root_dir=root_dir, local_rank=local_rank)
-
-    # Image Folder
+    # elif os.path.exists(rec) and os.path.exists(idx) and dali:
+    #     return dali_data_iter(
+    #         batch_size=batch_size, rec_file=rec, idx_file=idx,
+    #         num_threads=2, local_rank=local_rank)
+    #     # train_set = MXFaceDataset(root_dir=root_dir, local_rank=local_rank)
+    #
+    # # Image Folder
     else:
-        transform = transforms.Compose([
-             transforms.RandomHorizontalFlip(),
-             transforms.ToTensor(),
-             transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),
-             ])
-        train_set = ImageFolder(root_dir, transform)
+        # transform = transforms.Compose([
+        #      transforms.RandomHorizontalFlip(),
+        #      transforms.ToTensor(),
+        #      transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),
+        #      ])
+        train_set = ImageFolder(root_dir)
 
     # DALI
     if dali:

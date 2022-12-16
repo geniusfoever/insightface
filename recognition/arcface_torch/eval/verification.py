@@ -28,11 +28,9 @@ import datetime
 import os
 import pickle
 
-import mxnet as mx
 import numpy as np
 import sklearn
 import torch
-from mxnet import ndarray as nd
 from scipy import interpolate
 from sklearn.decomposition import PCA
 from sklearn.model_selection import KFold
@@ -226,30 +224,33 @@ def load_bin(path, image_size):
 @torch.no_grad()
 def test(data_set, backbone, batch_size, nfolds=10):
     print('testing verification..')
-    data_list = data_set[0]
+
+    embeddings_list = data_set[0]
     issame_list = data_set[1]
-    embeddings_list = []
     time_consumed = 0.0
-    for i in range(len(data_list)):
-        data = data_list[i]
-        embeddings = None
-        ba = 0
-        while ba < data.shape[0]:
-            bb = min(ba + batch_size, data.shape[0])
-            count = bb - ba
-            _data = data[bb - batch_size: bb]
-            time0 = datetime.datetime.now()
-            img = ((_data / 255) - 0.5) / 0.5
-            net_out: torch.Tensor = backbone(img)
-            _embeddings = net_out.detach().cpu().numpy()
-            time_now = datetime.datetime.now()
-            diff = time_now - time0
-            time_consumed += diff.total_seconds()
-            if embeddings is None:
-                embeddings = np.zeros((data.shape[0], _embeddings.shape[1]))
-            embeddings[ba:bb, :] = _embeddings[(batch_size - count):, :]
-            ba = bb
-        embeddings_list.append(embeddings)
+
+
+    # embeddings_list = []
+    # for i in range(len(data_list)):
+    #     data = data_list[i]
+    #     embeddings = None
+    #     ba = 0
+    #     while ba < data.shape[0]:
+    #         bb = min(ba + batch_size, data.shape[0])
+    #         count = bb - ba
+    #         _data = data[bb - batch_size: bb]
+    #         time0 = datetime.datetime.now()
+    #         img = ((_data / 255) - 0.5) / 0.5
+    #         net_out: torch.Tensor = backbone(img)
+    #         _embeddings = net_out.detach().cpu().numpy()
+    #         time_now = datetime.datetime.now()
+    #         diff = time_now - time0
+    #         time_consumed += diff.total_seconds()
+    #         if embeddings is None:
+    #             embeddings = np.zeros((data.shape[0], _embeddings.shape[1]))
+    #         embeddings[ba:bb, :] = _embeddings[(batch_size - count):, :]
+    #         ba = bb
+    #     embeddings_list.append(embeddings)
 
     _xnorm = 0.0
     _xnorm_cnt = 0

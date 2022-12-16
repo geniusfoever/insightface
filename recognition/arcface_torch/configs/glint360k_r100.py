@@ -19,9 +19,10 @@ config.lr = 0.1
 config.verbose = 2000
 config.dali = False
 
-config.rec = "/train_tmp/glint360k"
-config.num_classes = 360232
-config.num_image = 17091657
+config.rec = r"E:\dataset\glint\imgs0"
+config.num_classes = 73382
+config.num_image = 3000000
 config.num_epoch = 20
+config.val_root=r"D:\Glint"
 config.warmup_epoch = 0
 config.val_targets = ['lfw', 'cfp_fp', "agedb_30"]
