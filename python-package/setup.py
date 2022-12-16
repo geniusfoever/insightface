@@ -28,7 +28,7 @@ pypandoc_enabled = True
 try:
     import pypandoc
     print('pandoc enabled')
-    long_description = pypandoc.convert('README.md', 'rst')
+    long_description = pypandoc.convert_file('README.md', 'rst')
 except (IOError, ImportError, ModuleNotFoundError):
     print('WARNING: pandoc not enabled')
     long_description = open('README.md').read()
@@ -82,6 +82,7 @@ setup(
     url='https://github.com/deepinsight/insightface',
     description='InsightFace Python Library',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     license='MIT',
     # Package info
     packages=find_packages(exclude=('docs', 'tests', 'scripts')),

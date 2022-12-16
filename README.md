@@ -5,11 +5,15 @@
   <img src="https://insightface.ai/assets/img/custom/logo3.jpg" width="240"/>
 </div>
 
-InsightFace project is mainly maintained By [Jiankang Deng](https://jiankangdeng.github.io/) and [Jia Guo](mailto:guojia@gmail.com?subject=[GitHub]%20InsightFace%20Project). 
+InsightFace project is mainly maintained By [Jia Guo](mailto:guojia@gmail.com?subject=[GitHub]%20InsightFace%20Project) and [Jiankang Deng](https://jiankangdeng.github.io/). 
 
 For all main contributors, please check [contributing](#contributing).
 
 ## Top News
+
+**`2022-11-28`**: Single line code for facial identity swapping in our python packge ver 0.7, please check the example [here](examples/in_swapper).
+
+**`2022-10-28`**: [MFR-Ongoing](http://iccv21-mfr.com) website is refactored, please create issues if there's any bug.
 
 **`2022-09-22`**: Now we have [web-demos](web-demos): [face-localization](http://demo.insightface.ai:7007/), [face-recognition](http://demo.insightface.ai:7008/), and [face-swapping](http://demo.insightface.ai:7009/).
 
@@ -246,8 +250,8 @@ year={2019}
 
 Main contributors:
 
-- [Jiankang Deng](https://github.com/jiankangdeng) ``jiankangdeng[at]gmail.com``
 - [Jia Guo](https://github.com/nttstar), ``guojia[at]gmail.com``
+- [Jiankang Deng](https://github.com/jiankangdeng) ``jiankangdeng[at]gmail.com``
 - [Xiang An](https://github.com/anxiangsir) ``anxiangsir[at]gmail.com``
 - [Jack Yu](https://github.com/szad670401) ``jackyu961127[at]gmail.com``
 - [Baris Gecer](https://barisgecer.github.io/) ``barisgecer[at]msn.com``
