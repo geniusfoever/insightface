@@ -47,8 +47,8 @@ In this part, we assume you are in the directory *`$INSIGHTFACE_ROOT/recognition
 
 Place and edit config file:
 ```Shell
-cp sample_config.py config.py
-vim config.py # edit dataset path etc..
+cp sample_config.py config_bk.py
+vim config_bk.py # edit dataset path etc..
 ```
 
 We give some examples below. Our experiments were conducted on the Tesla P40 GPU.

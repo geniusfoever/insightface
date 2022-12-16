@@ -27,7 +27,9 @@
 import datetime
 import os
 import pickle
+from copy import copy
 
+import bcolz
 import numpy as np
 import sklearn
 import torch
@@ -195,27 +197,33 @@ def evaluate(embeddings, actual_issame, nrof_folds=10, pca=0):
     return tpr, fpr, accuracy, val, val_std, far
 
 @torch.no_grad()
-def load_bin(path, image_size):
-    try:
-        with open(path, 'rb') as f:
-            bins, issame_list = pickle.load(f)  # py2
-    except UnicodeDecodeError as e:
-        with open(path, 'rb') as f:
-            bins, issame_list = pickle.load(f, encoding='bytes')  # py3
+def load_bin(path, name,image_size):
+    bins = bcolz.carray(rootdir = os.path.join(path,name), mode='r')
+    issame_list = np.load(os.path.join(path,'{}_list.npy'.format(name)))
+
+
+    # try:
+    #     with open(path, 'rb') as f:
+    #         bins, issame_list = pickle.load(f)  # py2
+    # except UnicodeDecodeError as e:
+    #     with open(path, 'rb') as f:
+    #         bins, issame_list = pickle.load(f, encoding='bytes')  # py3
+
+
     data_list = []
     for flip in [0, 1]:
         data = torch.empty((len(issame_list) * 2, 3, image_size[0], image_size[1]))
         data_list.append(data)
     for idx in range(len(issame_list) * 2):
-        _bin = bins[idx]
-        img = mx.image.imdecode(_bin)
-        if img.shape[1] != image_size[0]:
-            img = mx.image.resize_short(img, image_size[0])
-        img = nd.transpose(img, axes=(2, 0, 1))
+        img = bins[idx]
+        # img = mx.image.imdecode(_bin)
+        # if img.shape[1] != image_size[0]:
+        #     img = mx.image.resize_short(img, image_size[0])
+        # img = np.transpose(img, axes=(2, 0, 1))
         for flip in [0, 1]:
             if flip == 1:
-                img = mx.ndarray.flip(data=img, axis=2)
-            data_list[flip][idx][:] = torch.from_numpy(img.asnumpy())
+                img = np.flip(img, 2)
+            data_list[flip][idx][:] = torch.Tensor(copy(img))
         if idx % 1000 == 0:
             print('loading bin', idx)
     print(data_list[0].shape)
@@ -224,33 +232,30 @@ def load_bin(path, image_size):
 @torch.no_grad()
 def test(data_set, backbone, batch_size, nfolds=10):
     print('testing verification..')
-
-    embeddings_list = data_set[0]
+    data_list = data_set[0]
     issame_list = data_set[1]
+    embeddings_list = []
     time_consumed = 0.0
-
-
-    # embeddings_list = []
-    # for i in range(len(data_list)):
-    #     data = data_list[i]
-    #     embeddings = None
-    #     ba = 0
-    #     while ba < data.shape[0]:
-    #         bb = min(ba + batch_size, data.shape[0])
-    #         count = bb - ba
-    #         _data = data[bb - batch_size: bb]
-    #         time0 = datetime.datetime.now()
-    #         img = ((_data / 255) - 0.5) / 0.5
-    #         net_out: torch.Tensor = backbone(img)
-    #         _embeddings = net_out.detach().cpu().numpy()
-    #         time_now = datetime.datetime.now()
-    #         diff = time_now - time0
-    #         time_consumed += diff.total_seconds()
-    #         if embeddings is None:
-    #             embeddings = np.zeros((data.shape[0], _embeddings.shape[1]))
-    #         embeddings[ba:bb, :] = _embeddings[(batch_size - count):, :]
-    #         ba = bb
-    #     embeddings_list.append(embeddings)
+    for i in range(len(data_list)):
+        data = data_list[i]
+        embeddings = None
+        ba = 0
+        while ba < data.shape[0]:
+            bb = min(ba + batch_size, data.shape[0])
+            count = bb - ba
+            _data = data[bb - batch_size: bb]
+            time0 = datetime.datetime.now()
+            # img = ((_data / 255) - 0.5) / 0.5
+            net_out: torch.Tensor = backbone(_data)
+            _embeddings = net_out.detach().cpu().numpy()
+            time_now = datetime.datetime.now()
+            diff = time_now - time0
+            time_consumed += diff.total_seconds()
+            if embeddings is None:
+                embeddings = np.zeros((data.shape[0], _embeddings.shape[1]))
+            embeddings[ba:bb, :] = _embeddings[(batch_size - count):, :]
+            ba = bb
+        embeddings_list.append(embeddings)
 
     _xnorm = 0.0
     _xnorm_cnt = 0

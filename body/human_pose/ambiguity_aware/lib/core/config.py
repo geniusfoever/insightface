@@ -142,7 +142,7 @@ def _update_dict(k, v):
         if vk in config[k]:
             config[k][vk] = vv
         else:
-            raise ValueError("{}.{} not exist in config.py".format(k, vk))
+            raise ValueError("{}.{} not exist in config_bk.py".format(k, vk))
 
 
 def update_config(config_file):
@@ -156,7 +156,7 @@ def update_config(config_file):
             else:
                 config[k] = v
         else:
-            raise ValueError("{} not exist in config.py".format(k))
+            raise ValueError("{} not exist in config_bk.py".format(k))
     assert not config.TRAIN.USE_TEMP or not config.TRAIN.USE_NEW_TEMP, "Don't use both temporal methods"
     assert config.DATA.NUM_NEIGHBOUR_TUPLES <= config.DATA.NUM_NEIGHBOUR_FRAMES * (config.DATA.NUM_NEIGHBOUR_FRAMES - 1) // 2
 

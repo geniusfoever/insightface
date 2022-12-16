@@ -43,11 +43,13 @@ class CallBackVerification(object):
 
     def init_dataset(self, val_targets, data_dir, image_size):
         for name in val_targets:
-            path = os.path.join(data_dir, name + ".bin")
+            path = os.path.join(data_dir, name + "_list.npy")
             if os.path.exists(path):
-                data_set = verification.load_bin(path, image_size)
+                data_set = verification.load_bin(data_dir,name, image_size)
                 self.ver_list.append(data_set)
                 self.ver_name_list.append(name)
+            else:
+                Warning(path,"Not Found")
 
     def __call__(self, num_update, backbone: torch.nn.Module):
         if self.rank is 0 and num_update > 0:

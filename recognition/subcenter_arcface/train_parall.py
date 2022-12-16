@@ -306,7 +306,7 @@ def train_net(args):
     for name in config.val_targets:
         path = os.path.join(data_dir, name + ".bin")
         if os.path.exists(path):
-            data_set = verification.load_bin(path, image_size)
+            data_set = verification.load_bin(data_dir,name, image_size)
             ver_list.append(data_set)
             ver_name_list.append(name)
             print('ver', name)

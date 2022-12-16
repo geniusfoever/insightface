@@ -8,10 +8,10 @@ config = edict()
 
 # Margin Base Softmax
 config.margin_list = (1.0, 0.5, 0.0)
-config.network = "r50"
+config.network = "r100"
 config.resume = False
 config.save_all_states = False
-config.output = "ms1mv3_arcface_r50"
+config.output = "ms1mv3_arcface_r100"
 
 config.embedding_size = 512
 
@@ -46,4 +46,4 @@ config.gradient_acc = 1
 config.seed = 2048
 
 # dataload numworkers
-config.num_workers = 2
+config.num_workers = 6
