@@ -116,8 +116,8 @@ dataset = edict()
 
 dataset.emore = edict()
 dataset.emore.dataset = 'emore'
-dataset.emore.dataset_path = '/content/gdrive/MyDrive/insightface/dataset/lfw_masked/'
-dataset.emore.num_classes = 4030
+dataset.emore.dataset_path = r'D:\DataBase\51\lfw_masked'
+dataset.emore.num_classes = 4037
 dataset.emore.image_shape = (112,112,3)
 #dataset.emore.val_targets = ['lfw','cfp_ff','cfp_fp', 'agedb_30','shunde']
 dataset.emore.val_targets = ['test']
@@ -184,7 +184,7 @@ default = edict()
 
 # default network
 default.network = 'r100'
-default.pretrained = '/content/gdrive/MyDrive/insightface/model/model-r100-ii-finetune/model'
+default.pretrained = r'G:\My Drive\insightface\model\r100-arcface-original\model'
 default.pretrained_epoch = 0
 
 #default.pretrained = '/content/gdrive/MyDrive/insightface/FaceRecognitionWIthInsightface/models/my/model-y1-test2/model'
@@ -203,7 +203,7 @@ default.mom = 0.9
 default.per_batch_size = 64
 default.ckpt = 2
 default.lr_steps = '1000,100000,160000,220000'
-default.models_root = '/content/gdrive/MyDrive/insightface/model/'
+default.models_root = 'G:\My Drive\insightface\model\output'
 
 
 def generate_config(_network, _dataset, _loss):

@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="5d84e2dd-7565-46b6-84bb-3986b28d9992" name="Changes" comment="final">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my/read_log.py" beforeDir="false" afterPath="$PROJECT_DIR$/my/read_log.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recognition/arcface_mxnet/verification.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_mxnet/verification.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recognition/arcface_mxnet/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_mxnet/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recognition/arcface_mxnet/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_mxnet/train.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,6 +203,13 @@
       <workItem from="1666152208768" duration="19842000" />
       <workItem from="1666234703858" duration="1893000" />
       <workItem from="1666244577865" duration="2992000" />
+      <workItem from="1666614913520" duration="2149000" />
+      <workItem from="1666792200307" duration="1750000" />
+      <workItem from="1666838830696" duration="1195000" />
+      <workItem from="1666854946659" duration="610000" />
+      <workItem from="1666879266603" duration="28000" />
+      <workItem from="1666942324819" duration="7000" />
+      <workItem from="1671169311984" duration="928000" />
     </task>
     <task id="LOCAL-00001" summary="yes">
       <created>1666177197272</created>

@@ -32,7 +32,8 @@ logger.setLevel(logging.INFO)
 
 args = None
 
-
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 def parse_args():
     parser = argparse.ArgumentParser(description='Train face network')
     # general
@@ -297,6 +298,8 @@ def train_net(args):
 
     #label_name = 'softmax_label'
     #label_shape = (args.batch_size,)
+
+    #-------------------------------Freeze------------------------------
     fpm = []
     for name in sym.list_arguments():
         if name == "bn1_gamma":
@@ -309,6 +312,7 @@ def train_net(args):
 
         fixed_param_names=fpm
     )
+    #-------------------------------Freeze------------------------------
     val_dataiter = None
 
     if config.loss_name.find('triplet') >= 0:
