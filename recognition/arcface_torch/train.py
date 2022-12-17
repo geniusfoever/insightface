@@ -20,34 +20,27 @@ from utils.utils_distributed_sampler import setup_seed
 assert torch.__version__ >= "1.9.0", "In order to enjoy the features of the new torch, \
 we have upgraded the torch to 1.9.0. torch before than 1.9.0 may not work in the future."
 
-# world_size = 1
-# rank = 0
-# distributed.init_process_group(
-#     backend="gloo",
-#     init_method="tcp://localhost:12589",
-#     rank=rank,
-#     world_size=world_size,
-# )
+
 def main(args):
     # get config
     cfg = get_config(args.config)
     # global control random seed
     setup_seed(seed=cfg.seed, cuda_deterministic=False)
 
-    torch.cuda.set_device(local_rank)
+    torch.cuda.set_device(args.rank)
 
     os.makedirs(cfg.output, exist_ok=True)
-    init_logging(rank, cfg.output)
+    init_logging(args.rank, cfg.output)
 
     summary_writer = (
         SummaryWriter(log_dir=os.path.join(cfg.output, "tensorboard"))
-        if rank == 0
+        if args.rank == 0
         else None
     )
 
     train_loader = get_dataloader(
         cfg.rec,
-        local_rank,
+        args.rank,
         cfg.batch_size,
         cfg.dali,
         cfg.seed,
@@ -58,7 +51,7 @@ def main(args):
         cfg.network, dropout=0.0, fp16=cfg.fp16, num_features=cfg.embedding_size).cuda()
     backbone.load_state_dict(r"E:\Github\insightface\recognition\arcface_torch\models\backbone.pth")
     backbone = torch.nn.parallel.DistributedDataParallel(
-        module=backbone, broadcast_buffers=False, device_ids=[local_rank], bucket_cap_mb=16,
+        module=backbone, broadcast_buffers=False, device_ids=[args.rank], bucket_cap_mb=16,
         find_unused_parameters=True)
 
     backbone.train()
@@ -110,7 +103,7 @@ def main(args):
     start_epoch = 0
     global_step = 0
     if cfg.resume:
-        dict_checkpoint = torch.load(os.path.join(cfg.output, f"checkpoint_gpu_{rank}.pt"))
+        dict_checkpoint = torch.load(os.path.join(cfg.output, f"checkpoint_gpu_{args.rank}.pt"))
         start_epoch = dict_checkpoint["epoch"]
         global_step = dict_checkpoint["global_step"]
         backbone.module.load_state_dict(dict_checkpoint["state_dict_backbone"])
@@ -176,16 +169,16 @@ def main(args):
                 "state_optimizer": opt.state_dict(),
                 "state_lr_scheduler": lr_scheduler.state_dict()
             }
-            torch.save(checkpoint, os.path.join(cfg.output, f"checkpoint_gpu_{rank}.pt"))
+            torch.save(checkpoint, os.path.join(cfg.output, f"checkpoint_gpu_{args.rank}.pt"))
 
-        if rank == 0:
+        if args.rank == 0:
             path_module = os.path.join(cfg.output, "model.pt")
             torch.save(backbone.module.state_dict(), path_module)
 
         if cfg.dali:
             train_loader.reset()
 
-    if rank == 0:
+    if args.rank == 0:
         path_module = os.path.join(cfg.output, "model.pt")
         torch.save(backbone.module.state_dict(), path_module)
 
@@ -196,25 +189,22 @@ def main(args):
 
 
 if __name__ == "__main__":
-    world_size = 1
-
-    distributed.init_process_group("gloo")
-    # try:
-    # except KeyError:
-    #     world_size = 1
-    #     rank = 0
-    #     distributed.init_process_group(
-    #         backend="nccl",
-    #         init_method="tcp://127.0.0.1:12584",
-    #         rank=rank,
-    #         world_size=world_size,
-    #     )
-    rank = distributed.get_rank()
-    local_rank = rank
-    print(rank)
-    torch.backends.cudnn.benchmark = True
     parser = argparse.ArgumentParser(
         description="Distributed Arcface Training in Pytorch")
     parser.add_argument("config", type=str, help="py config file")
-    parser.add_argument("--local_rank", type=int, default=0, help="local_rank")
-    main(parser.parse_args())
+    parser.add_argument("--rank", type=int, help="rank")
+    args=parser.parse_args()
+
+
+    world_size = 2
+    distributed.init_process_group(
+        backend="nccl",
+        init_method="tcp://localhost:12121",
+        rank=args.rank,
+        world_size=world_size,
+        )
+
+    print("Start Rank: ",args.rank, "_!@#$%^&*()_"*5)
+    torch.backends.cudnn.benchmark = True
+
+    main(args)

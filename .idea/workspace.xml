@@ -2,20 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5d84e2dd-7565-46b6-84bb-3986b28d9992" name="Changes" comment="final">
-      <change afterPath="$PROJECT_DIR$/recognition/arcface_torch/train_bk.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/body/human_pose/ambiguity_aware/lib/core/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/body/human_pose/ambiguity_aware/lib/core/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recognition/arcface_mxnet/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_mxnet/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recognition/arcface_torch/configs/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_torch/configs/base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recognition/arcface_torch/configs/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_torch/configs/config_bk.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recognition/arcface_torch/configs/glint360k_r100.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_torch/configs/glint360k_r100.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recognition/arcface_torch/eval/verification.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_torch/eval/verification.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recognition/arcface_torch/ms1mv3_arcface_r50/tensorboard/events.out.tfevents.1664876266.PeterPan.14992.0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/recognition/arcface_torch/ms1mv3_arcface_r50/tensorboard/events.out.tfevents.1664876338.PeterPan.18656.0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/recognition/arcface_torch/ms1mv3_arcface_r50/tensorboard/events.out.tfevents.1664876567.PeterPan.27940.0" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/recognition/arcface_torch/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_torch/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recognition/arcface_torch/utils/utils_callbacks.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/arcface_torch/utils/utils_callbacks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recognition/subcenter_arcface/train_parall.py" beforeDir="false" afterPath="$PROJECT_DIR$/recognition/subcenter_arcface/train_parall.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -225,6 +213,7 @@
       <workItem from="1671170565916" duration="17966000" />
       <workItem from="1671197790107" duration="955000" />
       <workItem from="1671200119585" duration="1484000" />
+      <workItem from="1671254272598" duration="2761000" />
     </task>
     <task id="LOCAL-00001" summary="yes">
       <created>1666177197272</created>
