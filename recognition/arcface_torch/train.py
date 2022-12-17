@@ -2,16 +2,18 @@ import argparse
 import logging
 import os
 
-import numpy as np
+# import numpy as np
 import torch
 from torch import distributed
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
+from torchvision import transforms
+from torchvision.datasets import ImageFolder
 from backbones import get_model
 from dataset import get_dataloader
 from losses import CombinedMarginLoss
-from lr_scheduler import PolyScheduler
+# from lr_scheduler import PolyScheduler
 from partial_fc import PartialFC, PartialFCAdamW
 from utils.utils_callbacks import CallBackLogging, CallBackVerification
 from utils.utils_config import get_config
@@ -37,22 +39,17 @@ def main(args):
         if args.rank == 0
         else None
     )
+    transform = transforms.Compose([
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),
+    ])
 
-    train_loader = get_dataloader(
-        cfg.rec,
-        args.rank,
-        cfg.batch_size,
-        cfg.dali,
-        cfg.seed,
-        cfg.num_workers
-    )
 
     backbone = get_model(
         cfg.network, dropout=0.0, fp16=cfg.fp16, num_features=cfg.embedding_size).cuda()
-    backbone.load_state_dict(r"E:\Github\insightface\recognition\arcface_torch\models\backbone.pth")
     backbone = torch.nn.parallel.DistributedDataParallel(
-        module=backbone, broadcast_buffers=False, device_ids=[args.rank], bucket_cap_mb=16,
-        find_unused_parameters=True)
+        module=backbone, broadcast_buffers=False, device_ids=[args.rank], bucket_cap_mb=16,)
 
     backbone.train()
     # FIXME using gradient checkpoint if there are some unused parameters will cause error
@@ -111,6 +108,8 @@ def main(args):
         opt.load_state_dict(dict_checkpoint["state_optimizer"])
         lr_scheduler.load_state_dict(dict_checkpoint["state_lr_scheduler"])
         del dict_checkpoint
+    else:
+        backbone.load_state_dict(torch.load(r"E:\Github\insightface\recognition\arcface_torch\models\backbone.pth"))
 
     for key, value in cfg.items():
         num_space = 25 - len(key)
@@ -128,13 +127,24 @@ def main(args):
     )
 
     loss_am = AverageMeter()
+    loss_schedule = AverageMeter()
     amp = torch.cuda.amp.grad_scaler.GradScaler(growth_interval=100)
-
+    if cfg.init_last_layer:
+        print("Freeze Previous Layer")
+        for param in backbone.parameters():
+            param.requires_grad = False
+        for params in opt.param_groups:
+            params['lr'] = 1
+            print("set lr to 1")
     for epoch in range(start_epoch, cfg.num_epoch):
+        dataset_id=cfg.rec_id+epoch%10
+        print(f"using *** {dataset_id} *** dataset")
+        train_loader = ImageFolder(cfg.rec + str(dataset_id), transform=transform)
 
         if isinstance(train_loader, DataLoader):
             train_loader.sampler.set_epoch(epoch)
         for _, (img, local_labels) in enumerate(train_loader):
+
             global_step += 1
             local_embeddings = backbone(img)
             loss: torch.Tensor = module_partial_fc(local_embeddings, local_labels, opt)
@@ -151,14 +161,27 @@ def main(args):
                 opt.step()
 
             opt.zero_grad()
-            lr_scheduler.step()
 
             with torch.no_grad():
                 loss_am.update(loss.item(), 1)
-                callback_logging(global_step, loss_am, epoch, cfg.fp16, lr_scheduler.get_last_lr()[0], amp)
+                loss_schedule.update(loss.item(), 1)
+                callback_logging(global_step, loss_am, epoch, cfg.fp16, opt.param_groups[0]['lr'], amp)
 
                 if global_step % cfg.verbose == 0 and global_step > 0:
                     callback_verification(global_step, backbone)
+                if global_step % 100 == 0:
+                    loss_schedule.update(loss_schedule.avg(), 1)
+                    loss_schedule.reset()
+
+            lr_scheduler.step(metrics=loss_am.avg)
+
+        if cfg.init_last_layer:
+            print("Unfreeze Previous Layer")
+            for param in backbone.parameters():
+                param.requires_grad = True
+            for params in opt.param_groups:
+                params['lr'] = cfg.lr
+                print(f"set lr to {cfg.lr}")
 
         if cfg.save_all_states:
             checkpoint = {
@@ -198,7 +221,7 @@ if __name__ == "__main__":
 
     world_size = 2
     distributed.init_process_group(
-        backend="nccl",
+        backend="gloo",
         init_method="tcp://localhost:12121",
         rank=args.rank,
         world_size=world_size,
