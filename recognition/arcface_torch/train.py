@@ -2,18 +2,13 @@ import argparse
 import logging
 import os
 
-# import numpy as np
 import torch
 from torch import distributed
-from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
-from torchvision import transforms
-from torchvision.datasets import ImageFolder
 from backbones import get_model
 from dataset import get_dataloader
 from losses import CombinedMarginLoss
-# from lr_scheduler import PolyScheduler
 from partial_fc import PartialFC, PartialFCAdamW
 from utils.utils_callbacks import CallBackLogging, CallBackVerification
 from utils.utils_config import get_config
@@ -39,15 +34,12 @@ def main(args):
         if args.rank == 0
         else None
     )
-    transform = transforms.Compose([
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),
-    ])
+
 
 
     backbone = get_model(
         cfg.network, dropout=0.0, fp16=cfg.fp16, num_features=cfg.embedding_size).cuda()
+    backbone.load_state_dict(torch.load(r"E:\Github\insightface\recognition\arcface_torch\models\backbone.pth"))
     backbone = torch.nn.parallel.DistributedDataParallel(
         module=backbone, broadcast_buffers=False, device_ids=[args.rank], bucket_cap_mb=16,)
 
@@ -95,7 +87,7 @@ def main(args):
     #     warmup_steps=cfg.warmup_step,
     #     last_epoch=-1
     # )
-    lr_scheduler=torch.optim.lr_scheduler.ReduceLROnPlateau(opt, patience=100,cooldown=500,factor=0.5,mode='min')
+    lr_scheduler=torch.optim.lr_scheduler.ReduceLROnPlateau(opt, patience=cfg.lr_scheduler_patience,cooldown=cfg.lr_scheduler_cooldown,factor=0.5,mode='min')
 
     start_epoch = 0
     global_step = 0
@@ -108,8 +100,6 @@ def main(args):
         opt.load_state_dict(dict_checkpoint["state_optimizer"])
         lr_scheduler.load_state_dict(dict_checkpoint["state_lr_scheduler"])
         del dict_checkpoint
-    else:
-        backbone.load_state_dict(torch.load(r"E:\Github\insightface\recognition\arcface_torch\models\backbone.pth"))
 
     for key, value in cfg.items():
         num_space = 25 - len(key)
@@ -139,10 +129,15 @@ def main(args):
     for epoch in range(start_epoch, cfg.num_epoch):
         dataset_id=cfg.rec_id+epoch%10
         print(f"using *** {dataset_id} *** dataset")
-        train_loader = ImageFolder(cfg.rec + str(dataset_id), transform=transform)
-
-        if isinstance(train_loader, DataLoader):
-            train_loader.sampler.set_epoch(epoch)
+        train_loader = get_dataloader(
+            cfg.rec + str(dataset_id),
+            args.rank,
+            cfg.batch_size,
+            cfg.dali,
+            cfg.seed,
+            cfg.num_workers
+        )
+        train_loader.sampler.set_epoch(epoch)
         for _, (img, local_labels) in enumerate(train_loader):
 
             global_step += 1
@@ -170,12 +165,13 @@ def main(args):
                 if global_step % cfg.verbose == 0 and global_step > 0:
                     callback_verification(global_step, backbone)
                 if global_step % 100 == 0:
-                    loss_schedule.update(loss_schedule.avg(), 1)
+                    lr_scheduler.step(metrics=loss_schedule.avg)
+
                     loss_schedule.reset()
 
-            lr_scheduler.step(metrics=loss_am.avg)
 
         if cfg.init_last_layer:
+            cfg.init_last_layer=False
             print("Unfreeze Previous Layer")
             for param in backbone.parameters():
                 param.requires_grad = True
