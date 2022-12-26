@@ -65,6 +65,7 @@ def calculate_roc(thresholds,
 
     tprs = np.zeros((nrof_folds, nrof_thresholds))
     fprs = np.zeros((nrof_folds, nrof_thresholds))
+    fnrs=np.zeros((nrof_folds, nrof_thresholds))
     accuracy = np.zeros((nrof_folds))
     indices = np.arange(nrof_pairs)
 

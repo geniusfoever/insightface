@@ -191,7 +191,7 @@ def main(args):
             torch.save(checkpoint, os.path.join(cfg.output, f"checkpoint_gpu_{args.rank}.pt"))
 
         if args.rank == 0:
-            path_module = os.path.join(cfg.output, "model.pt")
+            path_module = os.path.join(cfg.output, f"model{epoch}.pt")
             torch.save(backbone.module.state_dict(), path_module)
 
         if cfg.dali:
